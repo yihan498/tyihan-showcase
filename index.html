@@ -6,122 +6,163 @@
   <title>田一含 · Vibe Coder & Analyst</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
+    /* ── Tokens ───────────────────────────────────────── */
     :root {
-      --bg:        #f8f9fb;
-      --bg2:       #ffffff;
-      --border:    #e4e7ed;
-      --border2:   #d0d5de;
-      --text:      #111827;
-      --text2:     #4b5563;
-      --text3:     #9ca3af;
-      --accent:    #2563eb;
-      --accent-bg: #eff6ff;
-      --accent2:   #7c3aed;
-      --accent2-bg:#f5f3ff;
-      --green:     #059669;
-      --green-bg:  #ecfdf5;
-      --orange:    #d97706;
-      --orange-bg: #fffbeb;
-      --red:       #dc2626;
+      --bg:        #f7f4ee;
+      --bg2:       #fdfcf9;
+      --bg3:       #ffffff;
+      --border:    #e3dbd0;
+      --border2:   #cfc6b8;
+      --text:      #1e1b17;
+      --text2:     #686056;
+      --text3:     #a8998b;
+      --ink:       #2c4a7c;      /* deep distinguished blue */
+      --ink-light: #eef2f8;
+      --rust:      #b85630;      /* terracotta accent */
+      --rust-light:#fdf1eb;
+      --sage:      #3d6b57;      /* sage green */
+      --sage-light:#edf4f0;
+      --serif:     'Playfair Display', Georgia, serif;
+      --sans:      'Inter', system-ui, sans-serif;
       --mono:      'JetBrains Mono', monospace;
-      --sans:      'Inter', sans-serif;
       --radius:    10px;
-      --shadow:    0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-      --shadow-md: 0 4px 12px rgba(0,0,0,.06), 0 2px 4px rgba(0,0,0,.04);
+      --sh:        0 1px 4px rgba(30,20,10,.07), 0 1px 2px rgba(30,20,10,.04);
+      --sh-md:     0 4px 16px rgba(30,20,10,.08), 0 2px 4px rgba(30,20,10,.04);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ── Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
       color: var(--text);
       font-family: var(--sans);
       font-size: 14px;
-      line-height: 1.6;
+      line-height: 1.65;
       -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
     }
 
-    a { color: var(--accent); text-decoration: none; }
+    a { color: var(--ink); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    strong { font-weight: 600; }
-
+    /* ── Layout ───────────────────────────────────────── */
     .page {
       max-width: 860px;
       margin: 0 auto;
-      padding: 48px 24px 80px;
+      padding: 56px 24px 96px;
     }
 
-    /* ── Hero ──────────────────────────────────────────── */
+    /* ── Scroll reveal ────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .6s cubic-bezier(.22,.61,.36,1),
+                  transform .6s cubic-bezier(.22,.61,.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Hero ─────────────────────────────────────────── */
     .hero {
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 36px 40px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow);
+      padding: 40px 44px;
+      margin-bottom: 18px;
+      box-shadow: var(--sh);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 右上角装饰色块 */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle at top right, #e8ddd0 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-top {
       display: flex;
-      gap: 36px;
       align-items: flex-start;
+      gap: 24px;
+      margin-bottom: 20px;
     }
 
-    @media (max-width: 600px) {
-      .hero { flex-direction: column; gap: 20px; padding: 24px 20px; }
+    @media (max-width: 560px) {
+      .hero { padding: 28px 22px; }
+      .hero-top { flex-direction: column; gap: 14px; }
     }
 
-    .hero-avatar {
-      width: 68px;
-      height: 68px;
+    .hero-monogram {
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      background: var(--text);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: var(--mono);
+      font-family: var(--serif);
       font-size: 22px;
-      font-weight: 700;
-      color: #fff;
+      font-weight: 500;
+      color: var(--bg);
       flex-shrink: 0;
+      letter-spacing: .02em;
     }
 
     .hero-body { flex: 1; }
 
     .hero-name {
-      font-size: 20px;
-      font-weight: 700;
+      font-family: var(--serif);
+      font-size: 26px;
+      font-weight: 500;
       color: var(--text);
-      letter-spacing: -.3px;
+      line-height: 1.2;
+      letter-spacing: -.01em;
     }
 
-    .hero-title {
-      font-size: 13px;
+    .hero-name em {
+      font-style: italic;
       color: var(--text2);
-      margin-top: 2px;
+      font-weight: 400;
+    }
+
+    .hero-sub {
+      margin-top: 5px;
+      font-size: 12.5px;
+      color: var(--text3);
+      font-family: var(--mono);
+      letter-spacing: .03em;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
-    .hero-dot { color: var(--border2); }
+    .hero-sub-sep { opacity: .4; }
 
     .hero-desc {
-      margin-top: 14px;
       font-size: 14px;
       color: var(--text2);
-      line-height: 1.75;
-      max-width: 560px;
+      line-height: 1.8;
+      max-width: 580px;
+      border-left: 2px solid var(--border2);
+      padding-left: 16px;
     }
 
-    .hero-desc em { color: var(--accent); font-style: normal; font-weight: 500; }
+    .hero-desc strong { color: var(--text); font-weight: 600; }
 
     .hero-links {
       display: flex;
-      gap: 12px;
-      margin-top: 18px;
+      gap: 10px;
+      margin-top: 20px;
       flex-wrap: wrap;
     }
 
@@ -132,33 +173,42 @@
       font-size: 12px;
       font-weight: 500;
       color: var(--text2);
-      background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 5px 10px;
-      transition: border-color .15s, color .15s;
+      padding: 5px 11px;
+      background: var(--bg3);
+      transition: border-color .15s, color .15s, background .15s;
+      font-family: var(--mono);
     }
-    .hero-link:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+    .hero-link:hover {
+      border-color: var(--ink);
+      color: var(--ink);
+      background: var(--ink-light);
+      text-decoration: none;
+    }
 
-    /* ── Capability strip ──────────────────────────────── */
+    /* ── Caps ─────────────────────────────────────────── */
     .caps {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
-
-    @media (max-width: 640px) { .caps { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 620px) { .caps { grid-template-columns: repeat(2, 1fr); } }
 
     .cap-card {
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 18px 16px;
-      box-shadow: var(--shadow);
+      box-shadow: var(--sh);
     }
 
-    .cap-icon { font-size: 20px; margin-bottom: 8px; }
+    .cap-icon {
+      font-size: 18px;
+      margin-bottom: 9px;
+      display: block;
+    }
 
     .cap-title {
       font-size: 13px;
@@ -168,61 +218,74 @@
     }
 
     .cap-desc {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text3);
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
-    /* ── Section ───────────────────────────────────────── */
-    .section { margin-bottom: 20px; }
+    /* ── Section label ────────────────────────────────── */
+    .sec-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
 
-    .section-title {
+    .sec-label-text {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -.01em;
+    }
+
+    .sec-label-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .sec-label-count {
+      font-family: var(--mono);
       font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
       color: var(--text3);
-      margin-bottom: 12px;
-      padding-left: 2px;
     }
 
-    /* ── Project cards ──────────────────────────────────── */
+    /* ── Projects ─────────────────────────────────────── */
+    .proj-section { margin-bottom: 18px; }
+
     .proj-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
-
-    @media (max-width: 600px) { .proj-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { .proj-grid { grid-template-columns: 1fr; } }
 
     .proj-card {
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow);
+      padding: 22px 20px;
+      box-shadow: var(--sh);
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      transition: box-shadow .15s, border-color .15s;
+      gap: 11px;
       text-decoration: none;
       color: inherit;
+      transition: box-shadow .2s, border-color .2s, transform .2s;
     }
-
     .proj-card:hover {
       border-color: var(--border2);
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--sh-md);
+      transform: translateY(-2px);
       text-decoration: none;
     }
 
-    .proj-header {
+    .proj-top {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 8px;
     }
-
-    .proj-icon { font-size: 18px; }
 
     .proj-badge {
       font-family: var(--mono);
@@ -230,30 +293,32 @@
       font-weight: 500;
       padding: 2px 7px;
       border-radius: 4px;
-      flex-shrink: 0;
+      letter-spacing: .03em;
     }
-
-    .badge-live  { background: var(--green-bg);   color: var(--green);  border: 1px solid #a7f3d0; }
-    .badge-local { background: var(--orange-bg);  color: var(--orange); border: 1px solid #fde68a; }
+    .badge-live  { background: var(--sage-light); color: var(--sage);  border: 1px solid #b6d9c8; }
+    .badge-github{ background: var(--ink-light);  color: var(--ink);   border: 1px solid #c4d4ea; }
 
     .proj-name {
-      font-size: 14px;
-      font-weight: 600;
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 500;
       color: var(--text);
       line-height: 1.3;
     }
 
     .proj-tagline {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--accent);
+      font-size: 11.5px;
+      color: var(--rust);
       font-family: var(--mono);
+      border-left: 2px solid var(--rust);
+      padding-left: 8px;
+      line-height: 1.4;
     }
 
     .proj-desc {
       font-size: 13px;
       color: var(--text2);
-      line-height: 1.65;
+      line-height: 1.7;
       flex: 1;
     }
 
@@ -264,31 +329,35 @@
     }
 
     .tag {
-      font-size: 11px;
-      font-weight: 500;
-      padding: 2px 7px;
-      border-radius: 4px;
-      border: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 10.5px;
       color: var(--text2);
       background: var(--bg);
-      font-family: var(--mono);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 7px;
     }
 
-    .proj-footer {
-      border-top: 1px solid var(--border);
-      padding-top: 10px;
+    .proj-url {
+      font-family: var(--mono);
       font-size: 11px;
       color: var(--text3);
-      font-family: var(--mono);
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
+    .proj-card:hover .proj-url { color: var(--ink); }
 
-    /* ── Stack row ──────────────────────────────────────── */
+    /* ── Stack ────────────────────────────────────────── */
+    .stack-section { margin-bottom: 18px; }
+
     .stack-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
     }
-
     @media (max-width: 500px) { .stack-grid { grid-template-columns: 1fr; } }
 
     .stack-card {
@@ -296,315 +365,310 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 16px 18px;
-      box-shadow: var(--shadow);
+      box-shadow: var(--sh);
     }
 
     .stack-label {
-      font-size: 11px;
-      font-weight: 600;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      letter-spacing: .07em;
       text-transform: uppercase;
-      letter-spacing: .06em;
       color: var(--text3);
       margin-bottom: 10px;
     }
 
-    .stack-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    .stack-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 
     .stag {
       font-family: var(--mono);
       font-size: 11px;
       font-weight: 500;
-      padding: 3px 8px;
+      padding: 3px 9px;
       border-radius: 5px;
       border: 1px solid;
     }
+    .stag-ink  { color: var(--ink);  border-color: #c4d4ea; background: var(--ink-light); }
+    .stag-rust { color: var(--rust); border-color: #e8c4b0; background: var(--rust-light); }
+    .stag-sage { color: var(--sage); border-color: #b6d9c8; background: var(--sage-light); }
+    .stag-warm { color: #7a6850; border-color: #ddd0be; background: #f7f2eb; }
 
-    .stag-blue   { color: #1d4ed8; border-color: #bfdbfe; background: #eff6ff; }
-    .stag-purple { color: #6d28d9; border-color: #ddd6fe; background: #f5f3ff; }
-    .stag-green  { color: #065f46; border-color: #a7f3d0; background: #ecfdf5; }
-    .stag-orange { color: #92400e; border-color: #fde68a; background: #fffbeb; }
-    .stag-gray   { color: #374151; border-color: #e5e7eb; background: #f9fafb; }
-
-    /* ── Footer ─────────────────────────────────────────── */
+    /* ── Footer ───────────────────────────────────────── */
     .footer {
-      margin-top: 32px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
     }
 
-    .footer-copy { font-size: 12px; color: var(--text3); }
+    .footer-left {
+      font-family: var(--serif);
+      font-size: 13px;
+      font-style: italic;
+      color: var(--text3);
+    }
 
     .footer-links {
       display: flex;
-      gap: 16px;
+      gap: 18px;
     }
 
     .footer-links a {
-      font-size: 12px;
+      font-family: var(--mono);
+      font-size: 11.5px;
       color: var(--text3);
       font-weight: 500;
+      letter-spacing: .02em;
     }
-
-    .footer-links a:hover { color: var(--accent); text-decoration: none; }
-
-    /* ── Scroll reveal ──────────────────────────────────── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.55s ease, transform 0.55s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .footer-links a:hover { color: var(--ink); text-decoration: none; }
   </style>
 </head>
 
 <body>
 <div class="page">
 
-  <!-- ── Hero ── -->
-  <div class="hero reveal">
-    <div class="hero-avatar">田</div>
-    <div class="hero-body">
-      <div class="hero-name">田一含 · Yihan Tian</div>
-      <div class="hero-title">
-        <span>@yihan498</span>
-        <span class="hero-dot">·</span>
-        <span>金融学 @ 中国人民大学</span>
-        <span class="hero-dot">·</span>
-        <span>Vibe Coder</span>
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-monogram">田</div>
+      <div class="hero-body">
+        <div class="hero-name">田一含 <em>· Yihan Tian</em></div>
+        <div class="hero-sub">
+          <span>@yihan498</span>
+          <span class="hero-sub-sep">·</span>
+          <span>金融学 @ 中国人民大学</span>
+          <span class="hero-sub-sep">·</span>
+          <span>Vibe Coder</span>
+        </div>
       </div>
-      <div class="hero-desc">
-        金融在读，用 <em>AI 和代码</em> 做分析的杠杆工具。<br>
-        识别低效 → 快速构建 → 实际落地。6 个上线项目，覆盖数据自动化、可视化、全栈工具。<br>
-        Finance major who treats AI + code as leverage for analysis — <em>building things, not waiting for tools</em>.
-      </div>
-      <div class="hero-links">
-        <a class="hero-link" href="https://github.com/yihan498" target="_blank" rel="noopener">
-          <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          GitHub · 8 repos
-        </a>
-        <a class="hero-link" href="https://my.tyihan.com" target="_blank" rel="noopener">
-          <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-          my.tyihan.com
-        </a>
-        <a class="hero-link" href="mailto:tianyihan498@gmail.com">
-          <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          tianyihan498@gmail.com
-        </a>
-      </div>
+    </div>
+    <div class="hero-desc">
+      金融在读，用 <strong>AI 和代码</strong> 做分析的杠杆工具。识别低效 → 快速构建 → 实际落地。<br>
+      6 个上线项目，覆盖数据自动化、量化分析、可视化全栈，均来自真实场景中的具体痛点。
+    </div>
+    <div class="hero-links">
+      <a class="hero-link" href="https://github.com/yihan498" target="_blank" rel="noopener">
+        <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub · 8 repos
+      </a>
+      <a class="hero-link" href="https://my.tyihan.com" target="_blank" rel="noopener">
+        <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        my.tyihan.com
+      </a>
+      <a class="hero-link" href="mailto:tianyihan498@gmail.com">
+        <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        tianyihan498@gmail.com
+      </a>
     </div>
   </div>
 
-  <!-- ── Capabilities ── -->
+  <!-- Capabilities -->
   <div class="caps">
-    <div class="cap-card" style="transition-delay:.05s">
-      <div class="cap-icon">🔍</div>
+    <div class="cap-card">
+      <span class="cap-icon">🔍</span>
       <div class="cap-title">数据分析</div>
       <div class="cap-desc">SQL · Python · Excel，结构化处理数据并产出可落地结论</div>
     </div>
-    <div class="cap-card" style="transition-delay:.12s">
-      <div class="cap-icon">🤖</div>
+    <div class="cap-card">
+      <span class="cap-icon">🤖</span>
       <div class="cap-title">AI 驱动产出</div>
       <div class="cap-desc">用 AI 辅助研究、起草报告、提炼洞察，显著提升材料质量与速度</div>
     </div>
-    <div class="cap-card" style="transition-delay:.19s">
-      <div class="cap-icon">⚡</div>
+    <div class="cap-card">
+      <span class="cap-icon">⚡</span>
       <div class="cap-title">Vibe Coding</div>
       <div class="cap-desc">识别痛点 → 当周构建可用工具，6 个项目均在实际场景中稳定运行</div>
     </div>
-    <div class="cap-card" style="transition-delay:.26s">
-      <div class="cap-icon">📊</div>
+    <div class="cap-card">
+      <span class="cap-icon">📊</span>
       <div class="cap-title">可视化呈现</div>
       <div class="cap-desc">把复杂模型和数据做成交互式界面，让结论直接可见、可操作</div>
     </div>
   </div>
 
-  <!-- ── Projects ── -->
-  <div class="section">
-    <div class="section-title">Vibe Coding 项目 · 6 个上线</div>
-    <div class="proj-grid">
+  <!-- Projects -->
+  <div class="proj-section">
+    <div class="sec-label">
+      <span class="sec-label-text">个人作品</span>
+      <span class="sec-label-line"></span>
+      <span class="sec-label-count">06 shipped</span>
+    </div>
 
-      <!-- 1 -->
+    <div class="proj-grid">
       <a class="proj-card" href="https://github.com/yihan498/AI-fomula-to-word" target="_blank" rel="noopener">
-        <div class="proj-header">
-          <span class="proj-icon">🔌</span>
-          <span class="proj-badge badge-local">GitHub</span>
+        <div class="proj-top">
+          <span style="font-size:18px">🔌</span>
+          <span class="proj-badge badge-github">GitHub</span>
         </div>
         <div class="proj-name">AI 公式 → Word 插件</div>
-        <div class="proj-tagline">痛点：AI 回复中的公式粘贴到 Word 变乱码</div>
-        <div class="proj-desc">
-          在 ChatGPT / DeepSeek 选中含公式段落，按 Ctrl+C，浏览器自动下载可编辑 Word 文件，公式可双击修改。拦截复制事件 → 提取 LaTeX → 转换为 Word 原生公式格式，全程无感知。
-        </div>
+        <div class="proj-tagline">痛点：AI 回复公式粘贴到 Word 变乱码</div>
+        <div class="proj-desc">在 ChatGPT / DeepSeek 选中含公式段落按 Ctrl+C，浏览器自动下载可编辑 Word 文件。拦截复制事件 → 提取 LaTeX → 转换为 Word 原生公式格式，全程无感知。</div>
         <div class="proj-tags">
           <span class="tag">Browser Extension</span>
           <span class="tag">Flask</span>
           <span class="tag">python-docx</span>
           <span class="tag">LaTeX→OMML</span>
         </div>
-        <div class="proj-footer">github.com/yihan498/AI-fomula-to-word →</div>
+        <div class="proj-url">
+          <span>github.com/yihan498/AI-fomula-to-word</span>
+          <span>→</span>
+        </div>
       </a>
 
-      <!-- 2 -->
       <a class="proj-card" href="https://life-picture.tyihan.com" target="_blank" rel="noopener">
-        <div class="proj-header">
-          <span class="proj-icon">📈</span>
+        <div class="proj-top">
+          <span style="font-size:18px">📈</span>
           <span class="proj-badge badge-live">LIVE</span>
         </div>
         <div class="proj-name">人生曲线 · Life Trajectory</div>
         <div class="proj-tagline">痛点：人生规划太抽象，无法量化对比</div>
-        <div class="proj-desc">
-          将就业、创业、AI 协作、资本复利 5 条路径叠加可视化，参数可调，目标是复合曲线实现「每个低点高于前一个低点」。纯静态部署，数据本地化，零服务器成本。
-        </div>
+        <div class="proj-desc">将就业、创业、AI 协作、资本复利 5 条路径叠加可视化，参数实时可调，目标是复合曲线实现「每个低点高于前一个低点」。纯静态部署，零服务器成本。</div>
         <div class="proj-tags">
           <span class="tag">Chart.js</span>
           <span class="tag">Pure Static</span>
           <span class="tag">Data Viz</span>
           <span class="tag">LocalStorage</span>
         </div>
-        <div class="proj-footer">life-picture.tyihan.com →</div>
+        <div class="proj-url">
+          <span>life-picture.tyihan.com</span>
+          <span>→</span>
+        </div>
       </a>
 
-      <!-- 3 -->
       <a class="proj-card" href="https://wealth-grid.tyihan.com" target="_blank" rel="noopener">
-        <div class="proj-header">
-          <span class="proj-icon">💡</span>
+        <div class="proj-top">
+          <span style="font-size:18px">💡</span>
           <span class="proj-badge badge-live">LIVE</span>
         </div>
         <div class="proj-name">财富自由指南灯</div>
         <div class="proj-tagline">痛点：财务目标数字大，缺乏实时进度感</div>
-        <div class="proj-desc">
-          每笔收入按日花销折算成点亮的人生方格，支出则可能熄灭方格，把财富自由从抽象数字变成可视化进度。Python Flask 后端 + 前端交互，全栈自建。
-        </div>
+        <div class="proj-desc">每笔收入折算成点亮的人生方格，支出则可能熄灭方格。把财富自由从抽象数字变成可视化进度。Python Flask 后端 + 前端交互，全栈自建。</div>
         <div class="proj-tags">
           <span class="tag">Python</span>
           <span class="tag">Flask</span>
           <span class="tag">SQLite</span>
           <span class="tag">Full Stack</span>
         </div>
-        <div class="proj-footer">wealth-grid.tyihan.com →</div>
+        <div class="proj-url">
+          <span>wealth-grid.tyihan.com</span>
+          <span>→</span>
+        </div>
       </a>
 
-      <!-- 4 -->
       <a class="proj-card" href="https://yihan498.github.io/smart-portfolio/" target="_blank" rel="noopener">
-        <div class="proj-header">
-          <span class="proj-icon">📊</span>
+        <div class="proj-top">
+          <span style="font-size:18px">📊</span>
           <span class="proj-badge badge-live">LIVE</span>
         </div>
         <div class="proj-name">智配 · 投资组合配置</div>
-        <div class="proj-tagline">痛点：个人资产配置凭感觉，缺乏量化依据</div>
-        <div class="proj-desc">
-          11 因子风险评分 × 均值-方差优化（MVO），将「你是谁」（收入、年龄、风险偏好）转化为有数学依据的资产配置比例建议，分离主观判断与数学优化。
-        </div>
+        <div class="proj-tagline">痛点：个人配置凭感觉，缺乏量化依据</div>
+        <div class="proj-desc">11 因子风险评分 × 均值-方差优化（MVO），将收入、年龄、风险偏好转化为有数学依据的配置比例，分离主观判断与数学优化两层逻辑。</div>
         <div class="proj-tags">
           <span class="tag">JavaScript</span>
           <span class="tag">MVO 模型</span>
           <span class="tag">GitHub Pages</span>
           <span class="tag">Quant</span>
         </div>
-        <div class="proj-footer">yihan498.github.io/smart-portfolio →</div>
+        <div class="proj-url">
+          <span>yihan498.github.io/smart-portfolio</span>
+          <span>→</span>
+        </div>
       </a>
 
-      <!-- 5 -->
       <a class="proj-card" href="https://github.com/yihan498/wechat-to-markdown" target="_blank" rel="noopener">
-        <div class="proj-header">
-          <span class="proj-icon">📥</span>
-          <span class="proj-badge badge-local">GitHub</span>
+        <div class="proj-top">
+          <span style="font-size:18px">📥</span>
+          <span class="proj-badge badge-github">GitHub</span>
         </div>
         <div class="proj-name">微信公众号 → Markdown</div>
-        <div class="proj-tagline">痛点：行研素材散落在公众号，整理耗时</div>
-        <div class="proj-desc">
-          复制公众号链接 → 双击快捷方式，文章自动提取正文并保存为带 frontmatter 的 Markdown，SQLite 去重、多目录分管，消除行研素材收集的重复劳动。
-        </div>
+        <div class="proj-tagline">痛点：行研素材散落公众号，整理耗时</div>
+        <div class="proj-desc">复制公众号链接 → 双击快捷方式，文章自动提取正文并保存为带 frontmatter 的 Markdown。SQLite 去重、多目录分管，已累计处理 80+ 篇行研素材。</div>
         <div class="proj-tags">
           <span class="tag">Python</span>
           <span class="tag">BeautifulSoup</span>
           <span class="tag">SQLite</span>
           <span class="tag">Automation</span>
         </div>
-        <div class="proj-footer">github.com/yihan498/wechat-to-markdown →</div>
+        <div class="proj-url">
+          <span>github.com/yihan498/wechat-to-markdown</span>
+          <span>→</span>
+        </div>
       </a>
 
-      <!-- 6 -->
       <a class="proj-card" href="https://yihan498.github.io/sql-learning-site/" target="_blank" rel="noopener">
-        <div class="proj-header">
-          <span class="proj-icon">🗃️</span>
+        <div class="proj-top">
+          <span style="font-size:18px">🗃️</span>
           <span class="proj-badge badge-live">LIVE</span>
         </div>
         <div class="proj-name">SQL 自学站</div>
-        <div class="proj-tagline">痛点：SQL 课程材料分散，查阅不方便</div>
-        <div class="proj-desc">
-          10 章节结构化 SQL 学习网站，含章节导航、知识点索引与 Markdown 源文件，覆盖 SELECT、JOIN、子查询、增删改等核心操作，边学边查，开箱即用。
-        </div>
+        <div class="proj-tagline">痛点：SQL 课程材料分散，查阅不便</div>
+        <div class="proj-desc">10 章节结构化 SQL 学习网站，含章节导航与知识点索引，覆盖 SELECT、JOIN、子查询、增删改等核心操作，边学边查，开箱即用。</div>
         <div class="proj-tags">
           <span class="tag">SQL</span>
           <span class="tag">Static Site</span>
           <span class="tag">GitHub Pages</span>
         </div>
-        <div class="proj-footer">yihan498.github.io/sql-learning-site →</div>
+        <div class="proj-url">
+          <span>yihan498.github.io/sql-learning-site</span>
+          <span>→</span>
+        </div>
       </a>
-
     </div>
   </div>
 
-  <!-- ── Stack ── -->
-  <div class="section">
-    <div class="section-title">技术栈</div>
+  <!-- Stack -->
+  <div class="stack-section">
+    <div class="sec-label">
+      <span class="sec-label-text">技术栈</span>
+      <span class="sec-label-line"></span>
+    </div>
     <div class="stack-grid">
       <div class="stack-card">
         <div class="stack-label">分析 & 数据</div>
         <div class="stack-tags">
-          <span class="stag stag-blue">Python</span>
-          <span class="stag stag-blue">SQL</span>
-          <span class="stag stag-green">Excel</span>
-          <span class="stag stag-purple">BeautifulSoup</span>
-          <span class="stag stag-gray">SQLite</span>
+          <span class="stag stag-ink">Python</span>
+          <span class="stag stag-ink">SQL</span>
+          <span class="stag stag-warm">Excel</span>
+          <span class="stag stag-warm">SQLite</span>
+          <span class="stag stag-sage">BeautifulSoup</span>
         </div>
       </div>
       <div class="stack-card">
         <div class="stack-label">构建 & 部署</div>
         <div class="stack-tags">
-          <span class="stag stag-blue">JavaScript</span>
-          <span class="stag stag-green">Flask</span>
-          <span class="stag stag-orange">Hugo</span>
-          <span class="stag stag-gray">GitHub Pages</span>
-          <span class="stag stag-gray">Cloudflare</span>
+          <span class="stag stag-ink">JavaScript</span>
+          <span class="stag stag-sage">Flask</span>
+          <span class="stag stag-rust">Hugo</span>
+          <span class="stag stag-warm">GitHub Pages</span>
+          <span class="stag stag-warm">Cloudflare</span>
         </div>
       </div>
       <div class="stack-card">
         <div class="stack-label">AI & 工具</div>
         <div class="stack-tags">
-          <span class="stag stag-purple">Claude</span>
-          <span class="stag stag-blue">Feishu API</span>
-          <span class="stag stag-green">latex2mathml</span>
-          <span class="stag stag-orange">Chart.js</span>
+          <span class="stag stag-rust">Claude</span>
+          <span class="stag stag-ink">Feishu API</span>
+          <span class="stag stag-sage">latex2mathml</span>
+          <span class="stag stag-warm">Chart.js</span>
         </div>
       </div>
       <div class="stack-card">
         <div class="stack-label">可视化 & 文档</div>
         <div class="stack-tags">
-          <span class="stag stag-blue">python-docx</span>
-          <span class="stag stag-purple">Chart.js</span>
-          <span class="stag stag-green">Markdown</span>
-          <span class="stag stag-gray">HTML / CSS</span>
+          <span class="stag stag-ink">python-docx</span>
+          <span class="stag stag-rust">Chart.js</span>
+          <span class="stag stag-warm">Markdown</span>
+          <span class="stag stag-warm">HTML / CSS</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ── Footer ── -->
+  <!-- Footer -->
   <footer class="footer">
-    <span class="footer-copy">© 2026 田一含 · tyihan.com</span>
+    <span class="footer-left">© 2026 田一含 · tyihan.com</span>
     <div class="footer-links">
       <a href="https://my.tyihan.com" target="_blank" rel="noopener">Blog</a>
       <a href="https://github.com/yihan498" target="_blank" rel="noopener">GitHub</a>
@@ -613,38 +677,35 @@
   </footer>
 
 </div>
-  <script>
-    // 给需要动画的元素批量加 reveal class + 错开 delay
-    const hero     = document.querySelector('.hero');
-    const capCards = document.querySelectorAll('.cap-card');
-    const secTitle = document.querySelector('.section-title');
-    const projCards= document.querySelectorAll('.proj-card');
-    const stackCards=document.querySelectorAll('.stack-card');
-    const footer   = document.querySelector('.footer');
 
-    function tag(el, delay = 0) {
+<script>
+  // 批量打标 + 错开 delay
+  const groups = [
+    { sel: '.hero',       delay: 0 },
+    { sel: '.cap-card',   delay: 0.08, stagger: true },
+    { sel: '.sec-label',  delay: 0.04 },
+    { sel: '.proj-card',  delay: 0.07, stagger: true },
+    { sel: '.stack-card', delay: 0.07, stagger: true },
+    { sel: '.footer',     delay: 0 },
+  ];
+
+  groups.forEach(({ sel, delay, stagger }) => {
+    document.querySelectorAll(sel).forEach((el, i) => {
       el.classList.add('reveal');
-      if (delay) el.style.transitionDelay = delay + 's';
-    }
+      el.style.transitionDelay = (stagger ? i * delay : delay) + 's';
+    });
+  });
 
-    tag(hero);
-    capCards.forEach((el, i) => tag(el, i * 0.08));
-    if (secTitle) tag(secTitle);
-    projCards.forEach((el, i) => tag(el, i * 0.07));
-    stackCards.forEach((el, i) => tag(el, i * 0.07));
-    if (footer) tag(footer);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
 
-    // Intersection Observer：进入视口时触发
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target); // 只触发一次
-        }
-      });
-    }, { threshold: 0.12 });
-
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  </script>
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
 </body>
 </html>
