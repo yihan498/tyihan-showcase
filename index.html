@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>田一含 · Vibe Coder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:       #0d1117;
+      --surface:  #161b22;
+      --surface2: #21262d;
+      --border:   #30363d;
+      --border2:  #3d444d;
+      --text:     #e6edf3;
+      --text2:    #8b949e;
+      --text3:    #6e7681;
+      --green:    #3fb950;
+      --blue:     #58a6ff;
+      --purple:   #bc8cff;
+      --orange:   #f0883e;
+      --yellow:   #d29922;
+      --red:      #f85149;
+      --mono:     'JetBrains Mono', monospace;
+      --sans:     'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Layout ─────────────────────────── */
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ── Header ─────────────────────────── */
+    .header {
+      display: flex;
+      align-items: flex-start;
+      gap: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+
+    .avatar-wrap {
+      flex-shrink: 0;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1f6feb 0%, #bc8cff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      border: 2px solid var(--border);
+    }
+
+    .header-meta { flex: 1; }
+
+    .header-name {
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .header-handle {
+      font-family: var(--mono);
+      font-size: 14px;
+      color: var(--text2);
+      margin-top: 2px;
+    }
+
+    .header-bio {
+      margin-top: 10px;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .header-links {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-link {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text2);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .header-link:hover { color: var(--blue); text-decoration: none; }
+
+    /* ── Terminal block ──────────────────── */
+    .terminal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+
+    .terminal-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text3);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .terminal-body {
+      padding: 20px 24px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .t-prompt { color: var(--green); }
+    .t-cmd    { color: var(--text); }
+    .t-out    { color: var(--text2); }
+    .t-hl     { color: var(--blue); }
+    .t-str    { color: var(--orange); }
+    .t-num    { color: var(--purple); }
+    .t-tag    { color: var(--yellow); }
+    .t-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--green);
+      vertical-align: middle;
+      animation: blink 1.1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── Section header ──────────────────── */
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .section-head h2 {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .section-head::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .section-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text3);
+    }
+
+    /* ── Project grid ────────────────────── */
+    .projects { margin-bottom: 48px; }
+
+    .proj-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .proj-grid { grid-template-columns: 1fr; }
+      .header { flex-direction: column; gap: 16px; }
+    }
+
+    .proj-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      transition: border-color 0.15s, background 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .proj-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--card-accent, var(--blue));
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .proj-card:hover {
+      border-color: var(--border2);
+      background: var(--surface2);
+      text-decoration: none;
+    }
+
+    .proj-card:hover::before { opacity: 1; }
+
+    .proj-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .proj-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .proj-live {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--green);
+      background: rgba(63, 185, 80, 0.1);
+      border: 1px solid rgba(63, 185, 80, 0.3);
+      border-radius: 4px;
+      padding: 2px 6px;
+      flex-shrink: 0;
+    }
+
+    .proj-name {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--blue);
+      line-height: 1.3;
+    }
+
+    .proj-desc {
+      font-size: 13px;
+      color: var(--text2);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .proj-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 3px;
+      border: 1px solid;
+    }
+
+    .tag-blue   { color: var(--blue);   border-color: rgba(88,166,255,.3);   background: rgba(88,166,255,.07); }
+    .tag-green  { color: var(--green);  border-color: rgba(63,185,80,.3);    background: rgba(63,185,80,.07); }
+    .tag-purple { color: var(--purple); border-color: rgba(188,140,255,.3);  background: rgba(188,140,255,.07); }
+    .tag-orange { color: var(--orange); border-color: rgba(240,136,62,.3);   background: rgba(240,136,62,.07); }
+    .tag-yellow { color: var(--yellow); border-color: rgba(210,153,34,.3);   background: rgba(210,153,34,.07); }
+
+    .proj-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+
+    .proj-link {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text3);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .proj-card:hover .proj-link { color: var(--blue); }
+
+    /* ── Stats row ───────────────────────── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 600px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: var(--mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: 4px;
+      font-family: var(--mono);
+    }
+
+    /* ── Skills ──────────────────────────── */
+    .skills { margin-bottom: 48px; }
+
+    .skill-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .skill-cat {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text3);
+      width: 90px;
+      flex-shrink: 0;
+      padding-top: 3px;
+    }
+
+    /* ── Footer ──────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: gap;
+    }
+
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text3);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    .footer-links a:hover { color: var(--blue); text-decoration: none; }
+  </style>
+</head>
+
+<body>
+<div class="page">
+
+  <!-- ── Header ── -->
+  <header class="header">
+    <div class="avatar-wrap">田</div>
+    <div class="header-meta">
+      <div class="header-name">田一含 · Yihan Tian</div>
+      <div class="header-handle">@yihan498</div>
+      <div class="header-bio">
+        金融学在读 @ 中国人民大学 · 用 AI 把想法快速变成能用的东西。<br>
+        Finance student at RUC who builds tools that scratch real itches — shipping, not studying.
+      </div>
+      <div class="header-links">
+        <a class="header-link" href="https://github.com/yihan498" target="_blank" rel="noopener">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          github.com/yihan498
+        </a>
+        <a class="header-link" href="https://my.tyihan.com" target="_blank" rel="noopener">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+          my.tyihan.com
+        </a>
+        <a class="header-link" href="mailto:tianyihan498@gmail.com">
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          tianyihan498@gmail.com
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Terminal ── -->
+  <div class="terminal">
+    <div class="terminal-bar">
+      <span class="dot dot-r"></span>
+      <span class="dot dot-y"></span>
+      <span class="dot dot-g"></span>
+      <span class="terminal-title">~/yihan498 — bash</span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-prompt">❯</span> <span class="t-cmd">whoami</span></div>
+      <div class="t-out">金融学在读，副业是把「痛点」编译成「能用的东西」。</div>
+      <div class="t-out">Finance major @ RUC. Side job: turning pain points into working software.</div>
+      <br>
+      <div><span class="t-prompt">❯</span> <span class="t-cmd">cat approach.txt</span></div>
+      <div class="t-out">  <span class="t-tag">[识别痛点]</span> → 找到让自己或他人反复低效的操作</div>
+      <div class="t-out">  <span class="t-tag">[快速原型]</span> → 用 AI 协作，当天或当周拿出能跑的版本</div>
+      <div class="t-out">  <span class="t-tag">[打磨体验]</span> → 做到「给朋友用也不觉得糙」的水准</div>
+      <div class="t-out">  <span class="t-tag">[持续迭代]</span> → 根据实际使用反馈更新</div>
+      <br>
+      <div><span class="t-prompt">❯</span> <span class="t-cmd">ls projects/ <span class="t-str">--shipped</span></span></div>
+      <div class="t-out">  ai-formula-to-word/   wechat-to-markdown/   life-curve/</div>
+      <div class="t-out">  wealth-grid/          smart-portfolio/      sql-learning-site/</div>
+      <br>
+      <div><span class="t-prompt">❯</span> <span class="t-cursor"></span></div>
+    </div>
+  </div>
+
+  <!-- ── Stats ── -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--blue)">6</div>
+      <div class="stat-label">shipped projects</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--green)">4</div>
+      <div class="stat-label">live demos</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--purple)">3</div>
+      <div class="stat-label">GitHub repos</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:var(--orange)">0</div>
+      <div class="stat-label">days on waitlist</div>
+    </div>
+  </div>
+
+  <!-- ── Projects ── -->
+  <div class="projects">
+    <div class="section-head">
+      <h2>// projects</h2>
+      <span class="section-num">06 shipped</span>
+    </div>
+
+    <div class="proj-grid">
+
+      <!-- 1. AI Formula to Word -->
+      <a class="proj-card" href="https://github.com/yihan498/AI-fomula-to-word" target="_blank" rel="noopener" style="--card-accent: var(--blue)">
+        <div class="proj-card-top">
+          <span class="proj-icon">🔌</span>
+          <span class="proj-live">LIVE</span>
+        </div>
+        <div class="proj-name">AI 公式 → Word 插件</div>
+        <div class="proj-desc">
+          在 ChatGPT / DeepSeek 选中含公式段落，<strong>按 Ctrl+C</strong>，浏览器直接下载原生可编辑的 Word 文件——公式不是图片，可双击修改。
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-blue">Browser Extension</span>
+          <span class="tag tag-green">Flask</span>
+          <span class="tag tag-orange">python-docx</span>
+          <span class="tag tag-purple">LaTeX→OMML</span>
+        </div>
+        <div class="proj-footer">
+          <span class="proj-link">⎋ github.com/yihan498/AI-fomula-to-word →</span>
+        </div>
+      </a>
+
+      <!-- 2. Life Curve -->
+      <a class="proj-card" href="https://life-picture.tyihan.com" target="_blank" rel="noopener" style="--card-accent: var(--purple)">
+        <div class="proj-card-top">
+          <span class="proj-icon">📈</span>
+          <span class="proj-live">LIVE</span>
+        </div>
+        <div class="proj-name">人生曲线 · Life Trajectory</div>
+        <div class="proj-desc">
+          将就业、创业、AI 协作、资本复利等路径叠加可视化。核心目标：复合曲线实现<strong>「每个低点都高于前一个低点」——永久牛市</strong>。
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-purple">Chart.js</span>
+          <span class="tag tag-blue">Pure Static</span>
+          <span class="tag tag-green">LocalStorage</span>
+          <span class="tag tag-yellow">Data Viz</span>
+        </div>
+        <div class="proj-footer">
+          <span class="proj-link">⎋ life-picture.tyihan.com →</span>
+        </div>
+      </a>
+
+      <!-- 3. Wealth Grid -->
+      <a class="proj-card" href="https://wealth-grid.tyihan.com" target="_blank" rel="noopener" style="--card-accent: var(--yellow)">
+        <div class="proj-card-top">
+          <span class="proj-icon">💡</span>
+          <span class="proj-live">LIVE</span>
+        </div>
+        <div class="proj-name">财富自由指南灯</div>
+        <div class="proj-desc">
+          每笔收入→点亮 N 个人生方格，每笔支出→可能熄灭方格。把财富自由从抽象目标变成一张<strong>可实时更新的人生进度灯</strong>。
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-blue">Python</span>
+          <span class="tag tag-green">Flask</span>
+          <span class="tag tag-orange">SQLite</span>
+          <span class="tag tag-yellow">Full Stack</span>
+        </div>
+        <div class="proj-footer">
+          <span class="proj-link">⎋ wealth-grid.tyihan.com →</span>
+        </div>
+      </a>
+
+      <!-- 4. Smart Portfolio -->
+      <a class="proj-card" href="https://yihan498.github.io/smart-portfolio/" target="_blank" rel="noopener" style="--card-accent: var(--green)">
+        <div class="proj-card-top">
+          <span class="proj-icon">📊</span>
+          <span class="proj-live">LIVE</span>
+        </div>
+        <div class="proj-name">智配 · 投资组合配置</div>
+        <div class="proj-desc">
+          基于 11 因子风险评分与<strong>均值-方差优化</strong>的个人投资组合配置工具，把复杂的资产配置计算变成可操作的比例建议。
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-blue">JavaScript</span>
+          <span class="tag tag-green">GitHub Pages</span>
+          <span class="tag tag-purple">Quant</span>
+        </div>
+        <div class="proj-footer">
+          <span class="proj-link">⎋ yihan498.github.io/smart-portfolio →</span>
+        </div>
+      </a>
+
+      <!-- 5. WeChat to Markdown -->
+      <a class="proj-card" href="https://github.com/yihan498/wechat-to-markdown" target="_blank" rel="noopener" style="--card-accent: var(--orange)">
+        <div class="proj-card-top">
+          <span class="proj-icon">📥</span>
+          <span class="proj-live">LIVE</span>
+        </div>
+        <div class="proj-name">微信公众号 → Markdown</div>
+        <div class="proj-desc">
+          复制公众号链接，双击桌面快捷方式，文章自动保存为带 frontmatter 的 Markdown 文件。<strong>SQLite 去重 + 多目录管理 + 系统通知</strong>。
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-blue">Python</span>
+          <span class="tag tag-orange">SQLite</span>
+          <span class="tag tag-green">Windows App</span>
+          <span class="tag tag-yellow">Automation</span>
+        </div>
+        <div class="proj-footer">
+          <span class="proj-link">⎋ github.com/yihan498/wechat-to-markdown →</span>
+        </div>
+      </a>
+
+      <!-- 6. SQL Learning Site -->
+      <a class="proj-card" href="https://yihan498.github.io/sql-learning-site/" target="_blank" rel="noopener" style="--card-accent: var(--red)">
+        <div class="proj-card-top">
+          <span class="proj-icon">🗃️</span>
+          <span class="proj-live">LIVE</span>
+        </div>
+        <div class="proj-name">SQL 自学站</div>
+        <div class="proj-desc">
+          基于 Mosh 课程整理的 <strong>10 章节交互式学习网站</strong>，含章节导航、知识点索引与完整 Markdown 源文件，学完即用。
+        </div>
+        <div class="proj-tags">
+          <span class="tag tag-blue">Static Site</span>
+          <span class="tag tag-green">GitHub Pages</span>
+          <span class="tag tag-yellow">SQL</span>
+        </div>
+        <div class="proj-footer">
+          <span class="proj-link">⎋ yihan498.github.io/sql-learning-site →</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ── Skills ── -->
+  <div class="skills">
+    <div class="section-head">
+      <h2>// stack</h2>
+    </div>
+    <div class="skill-row">
+      <span class="skill-cat">Languages</span>
+      <span class="tag tag-blue">Python</span>
+      <span class="tag tag-yellow">JavaScript</span>
+      <span class="tag tag-orange">HTML / CSS</span>
+      <span class="tag tag-green">SQL</span>
+    </div>
+    <div class="skill-row">
+      <span class="skill-cat">Frameworks</span>
+      <span class="tag tag-blue">Flask</span>
+      <span class="tag tag-green">Hugo</span>
+      <span class="tag tag-purple">Chart.js</span>
+      <span class="tag tag-orange">python-docx</span>
+    </div>
+    <div class="skill-row">
+      <span class="skill-cat">AI / Tools</span>
+      <span class="tag tag-purple">Claude</span>
+      <span class="tag tag-blue">Cursor</span>
+      <span class="tag tag-green">Whisper</span>
+      <span class="tag tag-yellow">Ollama</span>
+      <span class="tag tag-orange">Feishu API</span>
+    </div>
+    <div class="skill-row">
+      <span class="skill-cat">Deploy</span>
+      <span class="tag tag-green">GitHub Pages</span>
+      <span class="tag tag-blue">Cloudflare</span>
+      <span class="tag tag-yellow">Local-first</span>
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <span class="footer-copy">© 2026 田一含 · tyihan.com</span>
+    <div class="footer-links">
+      <a href="https://my.tyihan.com" target="_blank" rel="noopener">Blog</a>
+      <a href="https://github.com/yihan498" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:tianyihan498@gmail.com">Email</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
