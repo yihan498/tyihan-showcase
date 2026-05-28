@@ -355,6 +355,17 @@
     }
 
     .footer-links a:hover { color: var(--accent); text-decoration: none; }
+
+    /* ── Scroll reveal ──────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 
@@ -362,7 +373,7 @@
 <div class="page">
 
   <!-- ── Hero ── -->
-  <div class="hero">
+  <div class="hero reveal">
     <div class="hero-avatar">田</div>
     <div class="hero-body">
       <div class="hero-name">田一含 · Yihan Tian</div>
@@ -397,22 +408,22 @@
 
   <!-- ── Capabilities ── -->
   <div class="caps">
-    <div class="cap-card">
+    <div class="cap-card" style="transition-delay:.05s">
       <div class="cap-icon">🔍</div>
       <div class="cap-title">数据分析</div>
       <div class="cap-desc">SQL · Python · Excel，结构化处理数据并产出可落地结论</div>
     </div>
-    <div class="cap-card">
+    <div class="cap-card" style="transition-delay:.12s">
       <div class="cap-icon">🤖</div>
       <div class="cap-title">AI 驱动产出</div>
       <div class="cap-desc">用 AI 辅助研究、起草报告、提炼洞察，显著提升材料质量与速度</div>
     </div>
-    <div class="cap-card">
+    <div class="cap-card" style="transition-delay:.19s">
       <div class="cap-icon">⚡</div>
       <div class="cap-title">Vibe Coding</div>
       <div class="cap-desc">识别痛点 → 当周构建可用工具，6 个项目均在实际场景中稳定运行</div>
     </div>
-    <div class="cap-card">
+    <div class="cap-card" style="transition-delay:.26s">
       <div class="cap-icon">📊</div>
       <div class="cap-title">可视化呈现</div>
       <div class="cap-desc">把复杂模型和数据做成交互式界面，让结论直接可见、可操作</div>
@@ -602,5 +613,38 @@
   </footer>
 
 </div>
+  <script>
+    // 给需要动画的元素批量加 reveal class + 错开 delay
+    const hero     = document.querySelector('.hero');
+    const capCards = document.querySelectorAll('.cap-card');
+    const secTitle = document.querySelector('.section-title');
+    const projCards= document.querySelectorAll('.proj-card');
+    const stackCards=document.querySelectorAll('.stack-card');
+    const footer   = document.querySelector('.footer');
+
+    function tag(el, delay = 0) {
+      el.classList.add('reveal');
+      if (delay) el.style.transitionDelay = delay + 's';
+    }
+
+    tag(hero);
+    capCards.forEach((el, i) => tag(el, i * 0.08));
+    if (secTitle) tag(secTitle);
+    projCards.forEach((el, i) => tag(el, i * 0.07));
+    stackCards.forEach((el, i) => tag(el, i * 0.07));
+    if (footer) tag(footer);
+
+    // Intersection Observer：进入视口时触发
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // 只触发一次
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
